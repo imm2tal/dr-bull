@@ -1,0 +1,215 @@
+
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#10251c">
+<title>Dr. Bull v01.001.001</title>
+<style>
+:root{--bg:#0b1511;--panel:#14241b;--green:#9be4a9;--text:#f2f7f2;--muted:#aabbb0;--line:#304538}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+header{padding:24px 18px;background:#10251c;border-bottom:1px solid var(--line)}
+.brand{font-size:27px;font-weight:800;letter-spacing:-1px}
+.brand span{color:var(--green)}
+.small{color:var(--muted);font-size:13px;margin-top:6px}
+main{max-width:760px;margin:auto;padding:16px}
+nav{display:flex;gap:8px;overflow:auto;padding:4px 0 14px}
+nav button{white-space:nowrap}
+button,input,select,textarea{font:inherit}
+button{border:1px solid var(--line);background:#20372a;color:var(--text);padding:11px 14px;border-radius:12px;cursor:pointer}
+button.active,.primary{background:var(--green);color:#10251c;border-color:var(--green);font-weight:700}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:14px}
+h2{font-size:21px;margin:4px 0 14px}
+h3{margin:0 0 8px;font-size:17px}
+p{line-height:1.5}
+label{display:block;color:var(--muted);font-size:14px;margin:12px 0 6px}
+input,select,textarea{width:100%;padding:12px;border-radius:10px;border:1px solid var(--line);background:#0b1511;color:var(--text)}
+textarea{min-height:90px;resize:vertical}
+form button{margin-top:14px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stat{background:#20372a;border-radius:12px;padding:14px}
+.stat strong{display:block;font-size:26px;color:var(--green)}
+.item{padding:12px 0;border-bottom:1px solid var(--line)}
+.item:last-child{border:0}
+.muted{color:var(--muted);font-size:14px}
+.warning{border-left:3px solid #efc36b;padding-left:12px;color:#f5dca2}
+.danger{color:#ffb3a8}
+.hidden{display:none!important}
+footer{text-align:center;padding:22px;color:var(--muted);font-size:12px}
+@media(max-width:420px){.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">🐂 Dr. <span>Bull</span></div>
+  <div class="small">ვეტერინარული ასისტენტი · ვერსია 01.001.001</div>
+</header>
+<main>
+  <nav id="nav">
+    <button class="active" data-tab="home">მთავარი</button>
+    <button data-tab="animals">ცხოველები</button>
+    <button data-tab="symptoms">სიმპტომები</button>
+    <button data-tab="care">მოვლის კალენდარი</button>
+    <button data-tab="diseases">დაავადებები</button>
+  </nav>
+
+  <section id="home" class="tab">
+    <div class="card">
+      <h2>მოგესალმები, ფერმერო! 👋</h2>
+      <p>მართე ნახირის მონაცემები, ჩაიწერე სიმპტომები და დაგეგმე ცხოველების მოვლა ერთ ადგილას.</p>
+      <div class="grid">
+        <div class="stat"><strong id="animalCount">0</strong><span>ცხოველი</span></div>
+        <div class="stat"><strong id="careCount">0</strong><span>მოვლის ჩანაწერი</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>⚠️ სასწრაფო ნიშნები</h3>
+      <p>სუნთქვის მძიმე გაძნელება, დაცემა და წამოდგომის შეუძლებლობა, ძლიერი სისხლდენა ან მუცლის სწრაფი გაბერვა მოითხოვს დაუყოვნებლივ ვეტერინართან დაკავშირებას.</p>
+    </div>
+    <div class="card">
+      <h3>📌 უსაფრთხოების წესი</h3>
+      <p class="muted">ეს ვერსია საინფორმაციო დამხმარეა. დიაგნოზი და მედიკამენტის დოზა ვეტერინარმა უნდა განსაზღვროს.</p>
+    </div>
+  </section>
+
+  <section id="animals" class="tab hidden">
+    <div class="card">
+      <h2>🐄 ცხოველის დამატება</h2>
+      <form id="animalForm">
+        <label>სახელი ან საიდენტიფიკაციო ნომერი</label>
+        <input name="name" required placeholder="მაგ. ძროხა 001">
+        <label>ცხოველის ტიპი</label>
+        <select name="type"><option>ძროხა</option><option>ხბო</option><option>ხარი</option><option>სხვა</option></select>
+        <label>ასაკი</label>
+        <input name="age" placeholder="მაგ. 2 წელი">
+        <label>წონა (კგ), თუ ცნობილია</label>
+        <input name="weight" type="number" min="0" placeholder="მაგ. 350">
+        <label>შენიშვნა</label>
+        <textarea name="notes" placeholder="ჯანმრთელობის ისტორია და სხვა ინფორმაცია"></textarea>
+        <button class="primary" type="submit">+ ცხოველის შენახვა</button>
+      </form>
+    </div>
+    <div class="card"><h3>ჩემი ცხოველები</h3><div id="animalList" class="muted">ჯერ ცხოველი არ დამატებულა.</div></div>
+  </section>
+
+  <section id="symptoms" class="tab hidden">
+    <div class="card">
+      <h2>🩺 სიმპტომების შეფასება</h2>
+      <p class="muted">მონიშნე დაკვირვებული ნიშნები. შედეგი მხოლოდ შესაძლო მიზეზების ზოგადი მიმართულებაა და არა დიაგნოზი.</p>
+      <form id="symptomForm">
+        <label><input type="checkbox" name="s" value="appetite"> მადის დაკარგვა</label>
+        <label><input type="checkbox" name="s" value="fever"> მომატებული ტემპერატურა</label>
+        <label><input type="checkbox" name="s" value="diarrhea"> ფაღარათი</label>
+        <label><input type="checkbox" name="s" value="bloat"> მუცლის გაბერვა</label>
+        <label><input type="checkbox" name="s" value="breathing"> სუნთქვის გაძნელება</label>
+        <label><input type="checkbox" name="s" value="lameness"> კოჭლობა</label>
+        <label><input type="checkbox" name="s" value="milk"> რძის შემცირება ან ცურის ცვლილება</label>
+        <label><input type="checkbox" name="s" value="weak"> ძლიერი სისუსტე ან წამოდგომის შეუძლებლობა</label>
+        <button class="primary" type="submit">შედეგის ნახვა</button>
+      </form>
+      <div id="symptomResult" class="hidden" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <section id="care" class="tab hidden">
+    <div class="card">
+      <h2>📅 მოვლის ჩანაწერი</h2>
+      <form id="careForm">
+        <label>ცხოველის სახელი ან ნომერი</label>
+        <input name="animal" required placeholder="მაგ. ძროხა 001">
+        <label>ღონისძიება</label>
+        <select name="kind"><option>ვაქცინაცია</option><option>პარაზიტების კონტროლი</option><option>ვეტერინარის ვიზიტი</option><option>სხვა მოვლა</option></select>
+        <label>თარიღი</label>
+        <input name="date" type="date" required>
+        <label>შენიშვნა</label>
+        <textarea name="notes" placeholder="პრეპარატი ან ვეტერინარის მითითება"></textarea>
+        <button class="primary" type="submit">ჩანაწერის დამატება</button>
+      </form>
+    </div>
+    <div class="card"><h3>დაგეგმილი და შესრულებული</h3><div id="careList" class="muted">ჯერ ჩანაწერი არ არის.</div></div>
+  </section>
+
+  <section id="diseases" class="tab hidden">
+    <div class="card">
+      <h2>📚 დაავადებების ცნობარი</h2>
+      <p class="muted">ზოგადი საგანმანათლებლო ინფორმაცია. სიმპტომები ერთმანეთს შეიძლება ჰგავდეს.</p>
+      <div class="item"><h3>მასტიტი</h3><p>ცურის შეშუპება, ტკივილი, რძის ცვლილება ან შემცირება. საჭიროა ვეტერინარული შეფასება.</p></div>
+      <div class="item"><h3>კოჭლობა</h3><p>შესაძლო მიზეზებია ჩლიქის დაზიანება, ინფექცია ან ტრავმა. საჭიროა კიდურისა და ჩლიქის შემოწმება.</p></div>
+      <div class="item"><h3>საჭმლის მომნელებელი დარღვევა</h3><p>მადის ცვლილება, ფაღარათი ან მუცლის დისკომფორტი სხვადასხვა მიზეზით შეიძლება განვითარდეს.</p></div>
+      <div class="item"><h3>რესპირატორული დაავადებები</h3><p>ხველა, ცხვირიდან გამონადენი, სიცხე ან გაძნელებული სუნთქვა. სუნთქვის გაძნელება გადაუდებელია.</p></div>
+      <div class="item"><h3>მუცლის მწვავე გაბერვა</h3><p>შეიძლება სიცოცხლისთვის საშიში იყოს. დაუყოვნებლივ დაუკავშირდი ვეტერინარს.</p></div>
+    </div>
+  </section>
+  <footer>Dr. Bull · v01.001.001 · საწყისი პროტოტიპი</footer>
+</main>
+<script>
+const $ = id => document.getElementById(id);
+const read = key => {
+  try { return JSON.parse(localStorage.getItem("drbull_"+key)||"[]"); }
+  catch { return []; }
+};
+const save = (key,data) => localStorage.setItem("drbull_"+key,JSON.stringify(data));
+document.querySelectorAll("[data-tab]").forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    document.querySelectorAll(".tab").forEach(el=>el.classList.add("hidden"));
+    $(btn.dataset.tab).classList.remove("hidden");
+    document.querySelectorAll("[data-tab]").forEach(b=>b.classList.toggle("active",b===btn));
+  });
+});
+function escapeHTML(s){
+  return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+function render(){
+  const animals=read("animals"), care=read("care");
+  $("animalCount").textContent=animals.length;
+  $("careCount").textContent=care.length;
+  $("animalList").innerHTML=animals.length?animals.map((a,i)=>`<div class="item"><b>${escapeHTML(a.name)}</b><p class="muted">${escapeHTML(a.type)} · ასაკი: ${escapeHTML(a.age||"უცნობია")} · წონა: ${escapeHTML(a.weight||"უცნობია")} კგ</p><p>${escapeHTML(a.notes||"შენიშვნა არ არის")}</p><button data-delete-animal="${i}">წაშლა</button></div>`).join(""):"ჯერ ცხოველი არ დამატებულა.";
+  $("careList").innerHTML=care.length?care.slice().sort((a,b)=>a.date.localeCompare(b.date)).map((c,i)=>`<div class="item"><b>${escapeHTML(c.animal)}</b> — ${escapeHTML(c.kind)}<p class="muted">თარიღი: ${escapeHTML(c.date)}</p><p>${escapeHTML(c.notes||"შენიშვნა არ არის")}</p><button data-done="${i}">${c.done?"შესრულებულია ✓":"შესრულებულად მონიშვნა"}</button> <button data-delete-care="${i}">წაშლა</button></div>`).join(""):"ჯერ ჩანაწერი არ არის.";
+}
+$("animalForm").addEventListener("submit",e=>{
+  e.preventDefault();const d=Object.fromEntries(new FormData(e.target));
+  const a=read("animals");a.push(d);save("animals",a);e.target.reset();render();
+});
+$("careForm").addEventListener("submit",e=>{
+  e.preventDefault();const d=Object.fromEntries(new FormData(e.target));
+  const a=read("care");a.push({...d,done:false});save("care",a);e.target.reset();render();
+});
+document.addEventListener("click",e=>{
+  if(e.target.dataset.deleteAnimal!==undefined){
+    const a=read("animals");a.splice(Number(e.target.dataset.deleteAnimal),1);save("animals",a);render();
+  }
+  if(e.target.dataset.deleteCare!==undefined){
+    const a=read("care");a.splice(Number(e.target.dataset.deleteCare),1);save("care",a);render();
+  }
+  if(e.target.dataset.done!==undefined){
+    const a=read("care");const i=Number(e.target.dataset.done);a[i].done=!a[i].done;save("care",a);render();
+  }
+});
+$("symptomForm").addEventListener("submit",e=>{
+  e.preventDefault();
+  const s=[...new FormData(e.target).getAll("s")];
+  const urgent=s.some(x=>["bloat","breathing","weak"].includes(x));
+  let text="<h3>შეფასების შედეგი</h3>";
+  if(!s.length) text+="<p>შედეგისთვის მინიმუმ ერთი სიმპტომი მონიშნე.</p>";
+  else {
+    text+=urgent?'<p class="danger"><b>გაფრთხილება:</b> მუცლის გაბერვა, სუნთქვის გაძნელება ან წამოდგომის შეუძლებლობა გადაუდებელ ვეტერინარულ დახმარებას მოითხოვს.</p>':"";
+    const causes=[];
+    if(s.includes("milk"))causes.push("ცურის ანთება (მასტიტი) ან ცურის სხვა პრობლემა");
+    if(s.includes("diarrhea"))causes.push("საჭმლის მომნელებელი დარღვევა, ინფექცია ან კვების ცვლილება");
+    if(s.includes("lameness"))causes.push("ჩლიქის პრობლემა, ტრავმა ან კიდურის დაავადება");
+    if(s.includes("fever"))causes.push("ინფექციური ან ანთებითი პროცესი");
+    if(s.includes("appetite"))causes.push("სხვადასხვა დაავადება, ტკივილი ან საკვების პრობლემა");
+    if(s.includes("bloat"))causes.push("მუცლის მწვავე გაბერვა — შესაძლოა გადაუდებელი მდგომარეობა");
+    if(s.includes("breathing"))causes.push("სასუნთქი სისტემის ან სხვა სერიოზული პრობლემა");
+    if(s.includes("weak"))causes.push("სისტემური დაავადება ან მძიმე სისუსტის გამომწვევი სხვა მიზეზი");
+    text+="<p><b>შესაძლო მიმართულებები:</b></p><ul>"+causes.map(c=>`<li>${escapeHTML(c)}</li>`).join("")+"</ul>";
+    text+='<p class="warning">ეს არ არის დიაგნოზი. დაუკავშირდი ვეტერინარს. არ გამოიყენო წამალი ან დოზა მხოლოდ ამ შედეგის საფუძველზე.</p>';
+  }
+  $("symptomResult").innerHTML=text;$("symptomResult").classList.remove("hidden");
+});
+render();
+</script>
+</body>
+</html>
